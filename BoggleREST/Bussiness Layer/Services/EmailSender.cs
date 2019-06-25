@@ -12,6 +12,8 @@ namespace MVCApp.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
+            return Task.CompletedTask;
+            // Code bellow needs proper setup with credentials, therefore it is not necessary step for now, since we can enable account using DB.
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
             mail.From = new MailAddress("");

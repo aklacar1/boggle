@@ -6,7 +6,8 @@ namespace BoggleREST
 {
     public partial class Users : IdentityUser
     {
-        public virtual ICollection<FirebaseTokens> FirebaseTokens { get; set; }
-        public virtual ICollection<GameParticipants> GameParticipants { get; set; }
+        internal virtual ICollection<FirebaseTokens> FirebaseTokens { get; set; }
+        internal virtual ICollection<GameParticipants> GameParticipants { get; set; }
+        internal virtual ICollection<GameWords> GameWords { get; set; }
     }
 }

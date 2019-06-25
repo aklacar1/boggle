@@ -79,6 +79,29 @@ namespace BoggleREST.Helpers
 
             return true;
         }
+        // TODO : Remove duplicate words
+        public static async Task<bool> DistributeResults(long roomId, BoggleContext dbContext) {
+            GameRoom gr = dbContext.GameRoom.Find(roomId);
+            gr.EndTime = DateTime.Now;
+            dbContext.SaveChanges();
+            List<GameParticipants> gameParticipants = dbContext.GameParticipants.Where(x => x.GameRoomId == roomId).ToList();
+            Dictionary<string, List<string>> players = new Dictionary<string, List<string>>();
+            foreach (GameParticipants gameParticipant in gameParticipants) {
+                players
+                    .Add(gameParticipant.User.UserName, dbContext.GameWords
+                    .Where(x => x.UserId == gameParticipant.UserId && x.GameRoomId == roomId)
+                    .Select(x => x.Word)
+                    .ToList());
+            }
+
+            Dictionary<string, int> results = Utils.ScorePlayers(players);
+            var usernames = players.Keys.ToList();
+            var tokens = dbContext.FirebaseTokens.Where(x => usernames.Contains(x.User.UserName)).Select(x=> x.Token).ToArray();
+
+            _ = Utils.SendPushNotification(tokens, "Game Results", JsonConvert.SerializeObject(results), results);
+            return true;
+        }
+        
         #endregion
         #region Query Native SQL
         public static Object SqlQueryScalar(this DbContext db, CommandType type, RawSqlString SQL, params object[] parameters)

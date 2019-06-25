@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BoggleREST.BussinessLayer.Services
+namespace BoggleREST.Bussiness_Layer.Services
 {
     internal partial class UserService : IUserService
     {
@@ -16,7 +16,7 @@ namespace BoggleREST.BussinessLayer.Services
         {
             this.dbContext = dbContext;
         }
-        #region Insert Person
+        #region Insert User
         public string InsertUser(Users user)
         {
             dbContext.Users.Add(user);

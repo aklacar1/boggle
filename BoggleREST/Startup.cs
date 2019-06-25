@@ -8,7 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using BoggleREST.API.ServiceInterfaces;
-using BoggleREST.BussinessLayer.Services;
+using Microsoft.AspNetCore.Http;
+using BoggleREST.Bussiness_Layer.Services;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace BoggleREST
 {
@@ -26,6 +29,23 @@ namespace BoggleREST
         {
             services.AddCors();
             services.AddDbContext<BoggleContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BoggleDB")));
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireDB"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    UsePageLocksOnDequeue = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             #region Swagger
             services.AddSwaggerGen(c =>
@@ -40,11 +60,14 @@ namespace BoggleREST
             });
             #endregion
             #region Inversion Of Control
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IFirebaseTokensService, FirebaseTokensService>();
             services.AddScoped<MVCApp.Services.IEmailSender, MVCApp.Services.EmailSender>();
             #endregion
             #region Identity Setup
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<Users, IdentityRole>()
                 .AddEntityFrameworkStores<BoggleContext>()
                 .AddDefaultTokenProviders();
 
@@ -81,7 +104,7 @@ namespace BoggleREST
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BoggleContext dBContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BoggleContext dBContext, IBackgroundJobClient backgroundJobs)
         {
             if (env.IsDevelopment())
             {
@@ -92,6 +115,7 @@ namespace BoggleREST
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                                 .AllowCredentials());
+            app.UseHangfireDashboard();
             // Cookie based Authentication.
             app.UseAuthentication();
             app.UseMvc();
