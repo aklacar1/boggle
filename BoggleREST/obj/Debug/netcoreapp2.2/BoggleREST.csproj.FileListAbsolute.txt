@@ -1,0 +1,14 @@
+D:\Development\boggle\BoggleREST\bin\Debug\netcoreapp2.2\BoggleREST.deps.json
+D:\Development\boggle\BoggleREST\bin\Debug\netcoreapp2.2\BoggleREST.runtimeconfig.json
+D:\Development\boggle\BoggleREST\bin\Debug\netcoreapp2.2\BoggleREST.runtimeconfig.dev.json
+D:\Development\boggle\BoggleREST\bin\Debug\netcoreapp2.2\BoggleREST.dll
+D:\Development\boggle\BoggleREST\bin\Debug\netcoreapp2.2\BoggleREST.pdb
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.csproj.CoreCompileInputs.cache
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.RazorAssemblyInfo.cache
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.RazorAssemblyInfo.cs
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.AssemblyInfoInputs.cache
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.AssemblyInfo.cs
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.RazorTargetAssemblyInfo.cache
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.dll
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.pdb
+D:\Development\boggle\BoggleREST\obj\Debug\netcoreapp2.2\BoggleREST.csprojAssemblyReference.cache
