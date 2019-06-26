@@ -10,6 +10,7 @@ namespace BoggleREST.API.ServiceInterfaces
         List<GameLetters> CreateGameRoom();
         List<GameLetters> GetGameRoomLettersByRoomId(long roomId);
         List<string> GetGameRoomParticipantsByRoomId(long roomId);
+        GameRoom GetRoomStatusByID(long roomId);
         bool JoinGameRoom(long roomId);
         bool StartGame(long roomId);
         bool AddWord(long roomId, string word);

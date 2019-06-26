@@ -84,7 +84,7 @@ namespace BoggleREST
 
             modelBuilder.Entity<GameWords>(entity =>
             {
-                entity.HasIndex(p => new { p.Word, p.GameRoomId, p.UserId }).IsUnique();
+                //entity.HasIndex(p => new { p.Word, p.GameRoomId, p.UserId }).IsUnique();
 
                 entity.Property(e => e.UserId)
                     .HasColumnName("UserID")

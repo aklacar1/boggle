@@ -1,1 +1,53 @@
-GAME LIES HERE
+<div *ngIf="roomId">Game ID: {{roomId}}</div>
+<div *ngIf="participants">Number of players: {{participants.length}}</div>
+<table *ngIf="letters" class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">1</th>
+        <th scope="col">2</th>
+        <th scope="col">3</th>
+        <th scope="col">4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>{{letters[0]}}</td>
+        <td>{{letters[1]}}</td>
+        <td>{{letters[2]}}</td>
+        <td>{{letters[3]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>{{letters[4]}}</td>
+        <td>{{letters[5]}}</td>
+        <td>{{letters[6]}}</td>
+        <td>{{letters[7]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>{{letters[8]}}</td>
+        <td>{{letters[9]}}</td>
+        <td>{{letters[10]}}</td>
+        <td>{{letters[11]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">4</th>
+        <td>{{letters[12]}}</td>
+        <td>{{letters[13]}}</td>
+        <td>{{letters[14]}}</td>
+        <td>{{letters[15]}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+<button class="btn btn-md btn-info btn-block" type="submit" (click)="startGame()">Start Game</button>
+<br/>
+<form class="form-login" role="form">
+    <input type="text" class="form-control" placeholder="newWord" [(ngModel)]="newWord" name="newWord" required autofocus>
+    <br/>
+    <button class="btn btn-md btn-info btn-block" type="submit" (click)="addWord()">Add word</button>
+</form>

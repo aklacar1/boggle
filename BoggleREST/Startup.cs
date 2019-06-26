@@ -125,8 +125,8 @@ namespace BoggleREST
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API Documentation V1");
                 c.RoutePrefix = String.Empty;
             });
-            //dBContext.Database.EnsureDeleted();
-            //dBContext.Database.EnsureCreated();
+           //dBContext.Database.EnsureDeleted();
+           // dBContext.Database.EnsureCreated();
         }
     }
 }

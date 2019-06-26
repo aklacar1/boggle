@@ -2,6 +2,7 @@
 using BoggleREST.Helpers;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,12 @@ namespace BoggleREST.Bussiness_Layer.Services
             return dbContext.GameParticipants.Where(x => x.GameRoomId == roomId).Select(x => x.User.UserName).ToList();
         }
 
+        public GameRoom GetRoomStatusByID(long roomId)
+        {
+            GameRoom gr = dbContext.GameRoom.Find(roomId);
+            return gr;
+        }
+
         public bool JoinGameRoom(long roomId)
         {
             GameRoom gr = dbContext.GameRoom.Find(roomId);
@@ -106,7 +113,34 @@ namespace BoggleREST.Bussiness_Layer.Services
             gr.StartTime = DateTime.Now;
             dbContext.GameRoom.Update(gr);
             dbContext.SaveChanges();
-            //BackgroundJob.Schedule(() => Utils.DistributeResults(roomId, dbContext), TimeSpan.FromMinutes(3));
+            BackgroundJob.Schedule(() => DistributeResults(roomId), TimeSpan.FromSeconds(10));
+            return true;
+        }
+
+
+        // TODO : Remove duplicate words
+        public bool DistributeResults(long roomId)
+        {
+            GameRoom gr = dbContext.GameRoom.Find(roomId);
+            gr.EndTime = DateTime.Now;
+            dbContext.SaveChanges();
+            List<GameParticipants> gameParticipants = dbContext.GameParticipants.Include(x=> x.User).Where(x => x.GameRoomId == roomId).ToList();
+            Dictionary<string, List<string>> players = new Dictionary<string, List<string>>();
+            foreach (GameParticipants gameParticipant in gameParticipants)
+            {
+                players
+                    .Add(gameParticipant.User.UserName, 
+                        dbContext.GameWords.Where(x => x.UserId == gameParticipant.UserId && x.GameRoomId == roomId)
+                        .Select(x => x.Word)
+                        .ToList());
+            }
+
+            Dictionary<string, int> results = Utils.ScorePlayers(players);
+            var usernames = players.Keys.ToList();
+            var tokens = dbContext.FirebaseTokens.Where(x => usernames.Contains(x.User.UserName)).Select(x => x.Token).ToList();
+            foreach (string token in tokens) {
+                Utils.SendNotificationAsync(token, "Game Results", JsonConvert.SerializeObject(results));
+            }
             return true;
         }
     }

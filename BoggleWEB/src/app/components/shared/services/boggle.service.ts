@@ -19,19 +19,41 @@ export class BoggleService {
     joinGameRoom(roomId: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.patch('http://localhost:50374/' +'api/api/Game/JoinGameRoom?roomId=' + roomId,null, options)
+        return this.http.patch('http://localhost:50374/' +'api/Game/JoinGameRoom?roomId=' + roomId,null, options)
             .pipe(map(response => response.json()));
     }
     startGame(roomId: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.patch('http://localhost:50374/' +'api/api/Game/StartGame?roomId=' + roomId,null, options)
+        return this.http.patch('http://localhost:50374/' +'api/Game/StartGame?roomId=' + roomId,null, options)
             .pipe(map(response => response.json()));
     }
+
+    getGameRoomParticipantsByRoomId(roomId: string) {
+        let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
+        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        return this.http.get('http://localhost:50374/' +'api/Game/GetGameRoomParticipantsByRoomId/' + roomId, options)
+            .pipe(map(response => response.json()));
+    }
+
+    getRoomStatusByID(roomId: string) {
+        let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
+        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        return this.http.get('http://localhost:50374/' +'api/Game/GetRoomStatusByID/' + roomId, options)
+            .pipe(map(response => response.json()));
+    }
+
+    getGameRoomLettersByRoomId(roomId: string) {
+        let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
+        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        return this.http.get('http://localhost:50374/' +'api/Game/GetGameRoomLettersByRoomId/' + roomId, options)
+            .pipe(map(response => response.json()));
+    }
+
     addWord(roomId: string, word: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.post('http://localhost:50374/' +'api/api/Game/AddWord?roomId=' + roomId + '&word=word', null,options)
+        return this.http.post('http://localhost:50374/' +'api/Game/AddWord?roomId=' + roomId + '&word='+word, null,options)
             .pipe(map(response => response.json()));
     }
 

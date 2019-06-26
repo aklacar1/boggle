@@ -40,6 +40,19 @@ namespace BoggleREST.API.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("GetRoomStatusByID/{roomId}")]
+        public async Task<IActionResult> GetRoomStatusByID(long roomId)
+        {
+
+            var result = gameService.GetRoomStatusByID(roomId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
+
         [HttpGet("GetGameRoomParticipantsByRoomId/{roomId}")]
         public async Task<IActionResult> GetGameRoomParticipantsByRoomId(long roomId)
         {

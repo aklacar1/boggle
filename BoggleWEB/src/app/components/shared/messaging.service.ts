@@ -59,6 +59,7 @@ export class MessagingService {
       (payload) => {
         // TODO : Custom behavior based on message payload.
         console.log("new message received. ", payload);
+        alert(payload);
         this.currentMessage.next(payload);
       })
   }
