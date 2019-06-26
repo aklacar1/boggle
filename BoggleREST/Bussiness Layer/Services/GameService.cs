@@ -113,7 +113,7 @@ namespace BoggleREST.Bussiness_Layer.Services
             gr.StartTime = DateTime.Now;
             dbContext.GameRoom.Update(gr);
             dbContext.SaveChanges();
-            BackgroundJob.Schedule(() => DistributeResults(roomId), TimeSpan.FromSeconds(10));
+            BackgroundJob.Schedule(() => DistributeResults(roomId), TimeSpan.FromMinutes(3));
             return true;
         }
 
