@@ -19,26 +19,26 @@ export class BoggleService {
     joinGameRoom(roomId: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.patch('http://localhost:50374/' +'api/api/Game/JoinGameRoom?roomId=' + roomId, options)
+        return this.http.patch('http://localhost:50374/' +'api/api/Game/JoinGameRoom?roomId=' + roomId,null, options)
             .pipe(map(response => response.json()));
     }
     startGame(roomId: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.patch('http://localhost:50374/' +'api/api/Game/StartGame?roomId=' + roomId, options)
+        return this.http.patch('http://localhost:50374/' +'api/api/Game/StartGame?roomId=' + roomId,null, options)
             .pipe(map(response => response.json()));
     }
     addWord(roomId: string, word: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.post('http://localhost:50374/' +'api/api/Game/AddWord?roomId=' + roomId + '&word=word', options)
+        return this.http.post('http://localhost:50374/' +'api/api/Game/AddWord?roomId=' + roomId + '&word=word', null,options)
             .pipe(map(response => response.json()));
     }
 
     sendFirebaseToken(token: string) {
         let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
         let options = new RequestOptions({ headers: headers, withCredentials: true });
-        return this.http.post('http://localhost:50374/' +'api/Firebase?token=' + token, options)
-            .pipe(map(response => response.json()));
+        this.http.post('http://localhost:50374/' +'api/Firebase?token=' + token, null,options)
+            .pipe().toPromise();
     }
 }

@@ -5,6 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
 
 import { AuthService } from './components/shared/services/auth.service';
 import {BoggleService} from './components/shared/services/boggle.service';
@@ -17,6 +22,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { FaqComponent } from './components/FAQ/faq.component';
 import { BoggleComponent } from './components/boggle/boggle.component';
 import { BoggleGameComponent } from './components/boggle-game/boggle.component';
+import { MessagingService } from "./components/shared/messaging.service";
+import { AsyncPipe } from '../../node_modules/@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,6 +42,10 @@ import { BoggleGameComponent } from './components/boggle-game/boggle.component';
     HttpModule,
     FormsModule,
     TableModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireMessagingModule,
+    AngularFireModule.initializeApp(environment.firebase),
     RouterModule.forRoot([
         { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'home', component: HomeComponent },
@@ -50,6 +61,8 @@ import { BoggleGameComponent } from './components/boggle-game/boggle.component';
   providers: [
     AuthService,
     BoggleService,
+    MessagingService,
+    AsyncPipe,
     { provide: 'BASE_URL', useFactory: getBaseUrl }
   ],
   bootstrap: [AppComponent]

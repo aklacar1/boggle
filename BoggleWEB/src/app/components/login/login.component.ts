@@ -3,14 +3,14 @@ import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { LoginData } from '../shared/types/login-data.type';
 import { Authentication } from '../shared/types/authentication.type';
-
+import { MessagingService } from "../shared/messaging.service";
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-    constructor(private auth: AuthService, private router: Router) {
+    constructor(private auth: AuthService, private router: Router, private messagingService: MessagingService) {
         auth.fillAuthData();
         if (auth.Auth.isAuth == true) {
             this.router.navigate(['movies']);
@@ -25,7 +25,13 @@ export class LoginComponent {
         if (this.loginData.userName == '' || this.loginData.password == '') {
             this.message = 'Please fill out the login data';
         }
-        this.auth.login(this.loginData).toPromise().then(res => this.router.navigate(['movies']));
+        this.auth.login(this.loginData).toPromise().then(res => {
+            
+            this.router.navigate(['boggle']);
+            this.auth.fillAuthData();
+            this.messagingService.requestPermission(this.loginData.userName);
+        });
+        
     }
 
 

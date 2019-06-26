@@ -81,6 +81,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.0.0-rc2, )"
+            },
+            "System.Collections.NonGeneric": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

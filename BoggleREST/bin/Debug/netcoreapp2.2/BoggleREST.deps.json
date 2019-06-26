@@ -32,7 +32,8 @@
           "Microsoft.EntityFrameworkCore": "2.2.4",
           "Microsoft.NETCore.App": "2.2.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.2.3",
-          "Swashbuckle.AspNetCore": "5.0.0-rc2"
+          "Swashbuckle.AspNetCore": "5.0.0-rc2",
+          "System.Collections.NonGeneric": "4.3.0"
         },
         "runtime": {
           "BoggleREST.dll": {}

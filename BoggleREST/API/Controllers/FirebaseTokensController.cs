@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BoggleREST;
 using BoggleREST.API.ServiceInterfaces;
+using BoggleREST.Helpers;
+using System.Collections;
 
 namespace BoggleREST.API.Controllers
 {
@@ -24,11 +26,7 @@ namespace BoggleREST.API.Controllers
         public async Task<IActionResult> PostFirebaseTokens(string token)
         {
 
-            var success = firebaseTokensService.AddDeviceToken(token);
-            if (!success) {
-                return BadRequest();
-            }
-
+            firebaseTokensService.AddDeviceToken(token);
             return Ok();
         }
 

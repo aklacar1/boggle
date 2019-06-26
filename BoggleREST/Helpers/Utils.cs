@@ -7,7 +7,9 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,11 @@ namespace BoggleREST.Helpers
 {
     public static class Utils
     {
+        private static Uri FireBasePushNotificationsURL = new Uri("https://fcm.googleapis.com/fcm/send");
+        private static string ServerKey = "AAAAzwWEWsE:APA91bEnDPARxfztkwYdO3Os1813W90KCRrGJSMjQyy2RggPCBtiamXaObar10uIy5PeFcKEynrnj9ZTm3LqwtgHG58I3QAh8zum99jev5qIOoziHPwPqKxGrWEMskuP1fXzkhQUrrr6";
+        private static string SenderID = "889150790337";
+
+
         #region Task 1
         /// <summary>
         /// Calculate score in word list and return it.
@@ -50,35 +57,119 @@ namespace BoggleREST.Helpers
         }
         #endregion
         #region Firebase
-        public static async Task<bool> SendPushNotification(string[] deviceTokens, string title, string body, object data)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceTokens">List of all devices assigned to a user</param>
+        /// <param name="title">Title of notification</param>
+        /// <param name="body">Description of notification</param>
+        /// <param name="data">Object with all extra information you want to send hidden in the notification</param>
+        /// <returns></returns>
+        public static async Task<bool> SendPushNotification(List<string> deviceTokens, string title, string body, object data)
         {
-            string FireBasePushNotificationsURL = "https://fcm.googleapis.com/fcm/send";
-            string ServerKey = "AIzaSyA6PwhtRjA47Sr3u4XN1xMJTZx5twmrpag";
-            var messageInformation = new Message()
-            {
-                notification = new Notification()
-                {
-                    title = title,
-                    text = body
-                },
-                data = data,
-                registration_ids = deviceTokens
-            };
-            //Object to JSON STRUCTURE => using Newtonsoft.Json;
-            string jsonMessage = JsonConvert.SerializeObject(messageInformation);
+            bool sent = false;
 
-            // Create request to Firebase API
-            var request = new HttpRequestMessage(HttpMethod.Post, FireBasePushNotificationsURL);
-            request.Headers.TryAddWithoutValidation("Authorization", "key =" + ServerKey);
-            request.Content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
-            HttpResponseMessage result;
-            using (var client = new HttpClient())
+            if (deviceTokens.Count() > 0)
             {
-                result = await client.SendAsync(request);
+                //Object creation
+
+                var messageInformation = new Message()
+                {
+                    notification = new Notification()
+                    {
+                        title = title,
+                        text = body
+                    },
+                    data = data,
+                    registration_ids = deviceTokens.ToArray()
+                };
+
+                //Object to JSON STRUCTURE => using Newtonsoft.Json;
+                string jsonMessage = JsonConvert.SerializeObject(messageInformation);
+
+                /*
+                 ------ JSON STRUCTURE ------
+                 {
+                    notification: {
+                                    title: "",
+                                    text: ""
+                                    },
+                    data: {
+                            action: "Play",
+                            playerId: 5
+                            },
+                    registration_ids = ["id1", "id2"]
+                 }
+                 ------ JSON STRUCTURE ------
+                 */
+
+                //Create request to Firebase API
+                var request = new HttpRequestMessage(HttpMethod.Post, FireBasePushNotificationsURL);
+
+                request.Headers.TryAddWithoutValidation("Authorization", "key=" + ServerKey);
+                request.Content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage result;
+                using (var client = new HttpClient())
+                {
+                    result = await client.SendAsync(request);
+                    sent = sent && result.IsSuccessStatusCode;
+                }
             }
 
-            return true;
+            return sent;
         }
+
+
+
+
+
+        public static async Task<bool> SendNotificationAsync(string token, string title, string body)
+        {
+            using (var client = new HttpClient())
+            {
+                var firebaseOptionsServerId = ServerKey;
+                var firebaseOptionsSenderId = SenderID;
+
+                client.BaseAddress = new Uri("https://fcm.googleapis.com");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization",
+                    $"key={firebaseOptionsServerId}");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Sender", $"id={firebaseOptionsSenderId}");
+
+
+                var data = new
+                {
+                    to = token,
+                    notification = new
+                    {
+                        body = body,
+                        title = title,
+                    },
+                    priority = "high"
+                };
+
+                var json = JsonConvert.SerializeObject(data);
+                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var result = await client.PostAsync("/fcm/send", httpContent);
+                return result.StatusCode.Equals(HttpStatusCode.OK);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // TODO : Remove duplicate words
         public static async Task<bool> DistributeResults(long roomId, BoggleContext dbContext) {
             GameRoom gr = dbContext.GameRoom.Find(roomId);
@@ -96,7 +187,7 @@ namespace BoggleREST.Helpers
 
             Dictionary<string, int> results = Utils.ScorePlayers(players);
             var usernames = players.Keys.ToList();
-            var tokens = dbContext.FirebaseTokens.Where(x => usernames.Contains(x.User.UserName)).Select(x=> x.Token).ToArray();
+            var tokens = dbContext.FirebaseTokens.Where(x => usernames.Contains(x.User.UserName)).Select(x=> x.Token).ToList();
 
             _ = Utils.SendPushNotification(tokens, "Game Results", JsonConvert.SerializeObject(results), results);
             return true;
