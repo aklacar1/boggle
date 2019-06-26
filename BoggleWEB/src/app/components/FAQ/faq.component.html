@@ -1,0 +1,65 @@
+﻿<div class="container-fluid">
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">General questions</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" name="faq" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Is account registration required?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Account registration is required.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" name="faq" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">I cannot register, what is password format ?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Password format is :  Minimum 8 characters, and at least one upper case letter and one lower case letter.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" name="faq" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">Is there any more info on how to use application ?</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Yes, but for other info you have to be logged in first, and depending on your credentials you will see more info.
+                </div>
+            </div>
+        </div>
+        <div data-ng-hide="!authentication.isAuth">
+            <div class="faqHeader">Placeholder</div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" name="faq" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Example Question For Auth Only.</a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Placeholder answer
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- #region Helper Script -->
+<script>
+    $('a[name=faq]').click(function (e) {
+        e.preventDefault();
+    });
+</script>
+<!-- #endregion -->

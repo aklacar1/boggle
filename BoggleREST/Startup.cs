@@ -111,7 +111,7 @@ namespace BoggleREST
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:32150", "http://localhost:50449")
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                                 .AllowCredentials());

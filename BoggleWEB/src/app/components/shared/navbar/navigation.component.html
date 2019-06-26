@@ -1,0 +1,25 @@
+﻿<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a *ngIf="auth.Auth.isAuth" class="navbar-brand" routerLink="" style="font-size:20px;">Welcome {{auth.Auth.userName}}</a>
+        </div>
+        <div class="collapse navbar-collapse" data-collapse="!navbarExpanded" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right" style="font-size:14px;">
+                <li *ngIf="!auth.Auth.isAuth" ng-class="{ active: isActive('/boggle')}"><a routerLink="/">Home</a></li>
+                <li *ngIf="auth.Auth.isAuth" ng-class="{ active: isActive('/boggle')}"><a routerLink="/boggle">Boggle</a></li>
+                <li ng-class="{ active: isActive('/faq')}"><a routerLink="/faq">FAQ <span class="sr-only">(current)</span></a></li>
+                <li *ngIf="auth.Auth.isAuth"><a routerLink="" (click)="logOut()">Logout</a></li>
+                <li *ngIf="!auth.Auth.isAuth" ng-class="{ active: isActive('/login')}"> <a routerLink="/login">Login</a></li>
+                <li *ngIf="!auth.Auth.isAuth" ng-class="{ active: isActive('/signup')}"> <a routerLink="/signup">Sign Up</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+

@@ -1,0 +1,18 @@
+﻿<div *ngIf="!auth.Auth.isAuth" class="row">
+    <div class="col-md-4">
+        &nbsp;
+    </div>
+    <div class="col-md-4">
+        <h2 class="colorMeWhite">Login</h2>
+        <p class="text-primary">If you have Username and Password, you can use the button below to access the secured content using a token.</p>
+        <p><a class="btn btn-info" routerLink="/login" role="button">Login &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2 class="colorMeWhite">Sign Up</h2>
+        <p class="text-primary">Use the button below to create Username and Password to access the secured content using a token.</p>
+        <p><a class="btn btn-info" routerLink="/signup" role="button">Sign Up &raquo;</a></p>
+    </div>
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+</div>
